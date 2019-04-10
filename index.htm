@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	
+	<script type="text/javascript" src="geopoint.js"></script>
+	
+	<title>Geopoint Tests</title>
+
+</head>
+
+<body>
+	<button type="button" id="btnGeoTest" onclick="geoTest();">Geo Test</button>
+	<button type="button" id="btnGeoTestCenter" onclick="geoTestCenter();">Geo Test Center</button>
+	<button type="button" id="btnGeoMaxMin" onclick="geoTestMaxMin();">Geo Max Min</button>
+	<button type="button" id="btnGeoMaxMinDist" onclick="geoTestMaxMinDistance();">Geo Max Min Distance</button>
+	
+	<script>
+		function geoTest(){
+			//var GeoPoint = require('geopoint');
+			var myLocation = new GeoPoint(-22.581871, 17.092670);
+			var houseLocation = new GeoPoint(-22.635243, 17.078856);
+			var groveLocation = new GeoPoint(-22.620818, 17.093487);
+			
+			console.log("Distance to house(km): " + myLocation.distanceTo(houseLocation, true));
+			console.log("Distance to grove(km): " + myLocation.distanceTo(groveLocation, true));
+			
+			var pointsMinMax = myLocation.boundingCoordinates(50, true);
+			console.log("Points Max/Min 1: " + pointsMinMax[0].latitude() + ", " + pointsMinMax[0].longitude());
+			console.log("Points Max/Min 2: " + pointsMinMax[1].latitude() + ", " + pointsMinMax[1].longitude());
+			
+			console.log("Distance to Max/Min 1: " + myLocation.distanceTo(pointsMinMax[0], true));
+			console.log("Distance to Max/Min 2: " + myLocation.distanceTo(pointsMinMax[1], true));
+			
+			var testLocation = new GeoPoint(pointsMinMax[1].latitude(), pointsMinMax[0].longitude());
+			
+			console.log("Distance to test(km): " + myLocation.distanceTo(testLocation, true));
+		}
+		
+		function geoTestCenter(){
+			var locationArray = [];
+			locationArray.push(new GeoPoint(-22.581151, 17.090923));
+			locationArray.push(new GeoPoint(-22.581855, 17.092220));
+			locationArray.push(new GeoPoint(-22.580958, 17.092048));
+			
+			var middle = GeoPoint.findCenter(locationArray);
+			
+			console.log("Points Middle: " + middle.latitude() + ", " + middle.longitude());
+		}
+		
+		function geoTestMaxMin(){
+			var locationArray = [];
+			locationArray.push(new GeoPoint(-22.581151, 17.090923));
+			locationArray.push(new GeoPoint(-22.581855, 17.092220));
+			locationArray.push(new GeoPoint(-22.580958, 17.092048));
+			locationArray.push(new GeoPoint(-22.581151, 17.090923));
+			locationArray.push(new GeoPoint(-22.580511, 17.089513));
+			locationArray.push(new GeoPoint(-22.579897, 17.089610));
+			locationArray.push(new GeoPoint(-22.579352, 17.090377));
+			
+			var maxMin = GeoPoint.findMaxMin(locationArray);
+			
+			//var maxPoint = maxMin.boundingCoordinates(50, true);
+			
+			console.log("Points Max: " + maxMin[0].latitude() + ", " + maxMin[0].longitude());
+			console.log("Points Min: " + maxMin[1].latitude() + ", " + maxMin[1].longitude());
+		}
+		
+		function geoTestMaxMinDistance(){
+			var locationArray = [];
+			locationArray.push(new GeoPoint(-22.581151, 17.090923));
+			locationArray.push(new GeoPoint(-22.581855, 17.092220));
+			locationArray.push(new GeoPoint(-22.580958, 17.092048));
+			locationArray.push(new GeoPoint(-22.581151, 17.090923));
+			locationArray.push(new GeoPoint(-22.580511, 17.089513));
+			locationArray.push(new GeoPoint(-22.579897, 17.089610));
+			locationArray.push(new GeoPoint(-22.579352, 17.090377));
+			
+			var maxMin = GeoPoint.findMaxMin(locationArray);
+			
+			console.log("Points Max: " + maxMin[0].latitude() + ", " + maxMin[0].longitude());
+			console.log("Points Min: " + maxMin[1].latitude() + ", " + maxMin[1].longitude());
+			
+			var maxPoint = new GeoPoint(maxMin[0].latitude(), maxMin[0].longitude());
+			var minPoint = new GeoPoint(maxMin[1].latitude(), maxMin[1].longitude());
+			var distance = maxPoint.distanceTo(minPoint, true);
+			
+			console.log("Max / Min distance: " + distance);
+			console.log("Zoom is: " + getMapsZoom(distance + 0.5));
+		}
+		
+		function getMapsZoom(dist){
+			if(dist < 24576) zoomLvl = 1;
+			if(dist < 12288) zoomLvl = 2;
+			if(dist < 6144) zoomLvl = 3;
+			if(dist < 3072) zoomLvl = 4;
+			if(dist < 1536) zoomLvl = 5;
+			if(dist < 768) zoomLvl = 6;
+			if(dist < 384) zoomLvl = 7;
+			if(dist < 192) zoomLvl = 8;
+			if(dist < 96) zoomLvl = 9;
+			if(dist < 48) zoomLvl = 10;
+			if(dist < 24) zoomLvl = 11;
+			if(dist < 11) zoomLvl = 12;
+			if(dist < 4.8) zoomLvl = 13;
+			if(dist < 3.2) zoomLvl = 14;
+			if(dist < 1.6) zoomLvl = 15;
+			if(dist < 0.8) zoomLvl = 16;
+			if(dist < 0.3) zoomLvl = 17;
+			return zoomLvl;
+		}
+		
+		
+		
+	</script>
+</body>
+
+</html>
