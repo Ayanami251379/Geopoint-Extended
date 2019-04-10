@@ -5,6 +5,7 @@ https://github.com/perfectline/geopoint
 
 --------------------------
 Added methods:
+--------------------------
 	findCenter
 	findMaxMin
 
